@@ -1,65 +1,304 @@
+"use client";
+
 import Image from "next/image";
+import type { CSSProperties, ReactNode } from "react";
+
+import { getContactDialogCopy } from "@/components/contact-dialog";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+import { useScrollReveal } from "@/components/use-scroll-reveal";
+import { useTranslations } from "@/components/preferences-provider";
+
+import fitLifeLogo from "../../FitLifeLogo.png";
+import eShopLogo from "../../e-ShopLogo.png";
+
+const reveal = (delay: string): CSSProperties => ({
+  "--reveal-delay": delay,
+} as CSSProperties);
+
+type LanguageCardProps = {
+  flag: ReactNode;
+  name: string;
+  level: string;
+  note?: string;
+};
+
+function LanguageCard({ flag, name, level, note }: LanguageCardProps) {
+  return (
+    <li className="language-card">
+      <span className="language-flag" aria-hidden="true">
+        {flag}
+      </span>
+      <span className="language-copy">
+        <span className="language-name">{name}</span>
+        {note ? <span className="language-note">{note}</span> : null}
+      </span>
+      <span className="language-badge">{level}</span>
+    </li>
+  );
+}
 
 export default function Home() {
+  const { __ } = useTranslations("page");
+  useScrollReveal();
+
+  const contactCopy = getContactDialogCopy(__);
+  const navItems = [
+    { href: "#top", label: __("nav.home"), kind: "anchor" as const },
+    { href: "#info", label: __("nav.info"), kind: "anchor" as const },
+    { href: "#projects", label: __("nav.projects"), kind: "anchor" as const },
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="page-shell">
+      <div className="page-frame">
+        <SiteHeader
+          brandHref="#top"
+          brandKind="anchor"
+          brandLabel="Vladislav"
+          navLabel={__("nav.aria")}
+          navItems={navItems}
+          settingsAria={__("settings.aria")}
+          className="fade-in"
+          style={reveal("0ms")}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+        <section className="hero" id="top">
+          <div className="hero-intro">
+            <p className="hero-eyebrow fade-in" style={reveal("90ms")}>
+              {__("hero.eyebrow")}
+            </p>
+            <h1 className="hero-title fade-in" style={reveal("170ms")}>
+              {__("hero.title.line1")}<br />{__("hero.title.line2")}
+            </h1>
+            <p className="hero-lead fade-in" style={reveal("250ms")}>
+              {__("hero.lead")}
+            </p>
+
+            <ul className="hero-highlights fade-in" style={reveal("330ms")}>
+              <li className="hero-pill">
+                <span className="hero-pill-dot" aria-hidden="true" />
+                {__("hero.meta.role")}
+              </li>
+              <li className="hero-pill">
+                <span className="hero-pill-dot" aria-hidden="true" />
+                {__("hero.meta.location")}
+              </li>
+              <li className="hero-pill">
+                <span className="hero-pill-dot" aria-hidden="true" />
+                {__("hero.meta.focus")}
+              </li>
+            </ul>
+          </div>
+
+          <div className="hero-actions fade-in" style={reveal("410ms")}>
+            <a className="btn-primary" href="#projects">{__("hero.actions.projects")}</a>
+            <a className="btn-ghost" href="#info">{__("hero.actions.about")}</a>
+          </div>
+        </section>
+
+        <section className="section" id="info">
+          <div className="section-head fade-in" style={reveal("60ms")}>
+            <span className="section-label">{__("section.info.label")}</span>
+          </div>
+
+          <div className="accordion-list">
+            <details className="accordion-item fade-in" style={reveal("100ms")}>
+              <summary className="accordion-trigger">
+                <span>{__("info.education.question")}</span>
+                <span className="accordion-marker" aria-hidden="true">+</span>
+              </summary>
+              <div className="accordion-body">
+                <div className="accordion-body-inner">
+                  <p>{__("info.education.answer")}</p>
+                  <div className="accordion-links">
+                    <a
+                      className="text-link"
+                      href="https://www.vtdt.lv"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true" className="link-icon">
+                        <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" strokeWidth="1.3" />
+                        <path d="M7.5 1C9.7 3 10.8 5.1 10.8 7.5S9.7 12 7.5 14C5.3 12 4.2 9.9 4.2 7.5S5.3 3 7.5 1Z" stroke="currentColor" strokeWidth="1.3" />
+                        <path d="M1 7.5h13" stroke="currentColor" strokeWidth="1.3" />
+                      </svg>
+                      {__("info.education.website")}
+                    </a>
+                    <a
+                      className="text-link text-link--fb"
+                      href="https://www.facebook.com/share/1CVT2NAWam/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <svg width="17" height="17" viewBox="0 0 17 17" aria-hidden="true" className="link-icon link-icon--colored">
+                        <rect width="17" height="17" rx="4" fill="#1877F2" />
+                        <path d="M11.1 8.7H9.4V14H7.2V8.7H5.9V6.7h1.3V5.7C7.2 4.2 8 3.3 9.4 3.3c.6 0 1.2.06 1.2.06V5h-.8c-.68 0-.87.42-.87.85V6.7H11l-.28 2z" fill="white" />
+                      </svg>
+                      {__("info.education.facebook")}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            <details className="accordion-item fade-in" style={reveal("140ms")}>
+              <summary className="accordion-trigger">
+                <span>{__("info.timeline.question")}</span>
+                <span className="accordion-marker" aria-hidden="true">+</span>
+              </summary>
+              <div className="accordion-body">
+                <div className="accordion-body-inner">
+                  <p>{__("info.timeline.answer")}</p>
+                </div>
+              </div>
+            </details>
+
+            <details className="accordion-item fade-in" style={reveal("180ms")}>
+              <summary className="accordion-trigger">
+                <span>{__("info.speciality.question")}</span>
+                <span className="accordion-marker" aria-hidden="true">+</span>
+              </summary>
+              <div className="accordion-body">
+                <div className="accordion-body-inner">
+                  <p>{__("info.speciality.answer")}</p>
+                </div>
+              </div>
+            </details>
+
+            <details className="accordion-item fade-in" style={reveal("220ms")}>
+              <summary className="accordion-trigger">
+                <span>{__("info.location.question")}</span>
+                <span className="accordion-marker" aria-hidden="true">+</span>
+              </summary>
+              <div className="accordion-body">
+                <div className="accordion-body-inner">
+                  <p>{__("info.location.answer")}</p>
+                </div>
+              </div>
+            </details>
+
+            <details className="accordion-item fade-in" style={reveal("260ms")}>
+              <summary className="accordion-trigger">
+                <span>{__("info.languages.question")}</span>
+                <span className="accordion-marker" aria-hidden="true">+</span>
+              </summary>
+              <div className="accordion-body">
+                <div className="accordion-body-inner">
+                  <ul className="language-levels">
+                    <LanguageCard
+                      flag={(
+                        <svg viewBox="0 0 36 36" aria-hidden="true">
+                          <rect width="36" height="18" fill="#2563eb" />
+                          <rect y="18" width="36" height="18" fill="#facc15" />
+                        </svg>
+                      )}
+                      name={__("info.languages.ukrainian.name")}
+                      level={__("info.languages.ukrainian.level")}
+                      note={__("info.languages.ukrainian.note") || undefined}
+                    />
+                    <LanguageCard
+                      flag={(
+                        <svg viewBox="0 0 36 36" aria-hidden="true">
+                          <rect width="36" height="12" fill="#ffffff" />
+                          <rect y="12" width="36" height="12" fill="#2563eb" />
+                          <rect y="24" width="36" height="12" fill="#dc2626" />
+                        </svg>
+                      )}
+                      name={__("info.languages.russian.name")}
+                      level={__("info.languages.russian.level")}
+                      note={__("info.languages.russian.note") || undefined}
+                    />
+                    <LanguageCard
+                      flag={(
+                        <svg viewBox="0 0 36 36" aria-hidden="true">
+                          <rect width="36" height="36" fill="#1d4ed8" />
+                          <path d="M0 4.5 4.5 0 36 31.5 31.5 36Z" fill="#ffffff" />
+                          <path d="M31.5 0 36 4.5 4.5 36 0 31.5Z" fill="#ffffff" />
+                          <path d="M0 7.5 7.5 0 36 28.5 28.5 36Z" fill="#dc2626" />
+                          <path d="M28.5 0 36 7.5 7.5 36 0 28.5Z" fill="#dc2626" />
+                          <rect x="14" width="8" height="36" fill="#ffffff" />
+                          <rect y="14" width="36" height="8" fill="#ffffff" />
+                          <rect x="15.5" width="5" height="36" fill="#dc2626" />
+                          <rect y="15.5" width="36" height="5" fill="#dc2626" />
+                        </svg>
+                      )}
+                      name={__("info.languages.english.name")}
+                      level={__("info.languages.english.level")}
+                      note={__("info.languages.english.note") || undefined}
+                    />
+                    <LanguageCard
+                      flag={(
+                        <svg viewBox="0 0 36 36" aria-hidden="true">
+                          <rect width="36" height="14" fill="#8f1d36" />
+                          <rect y="14" width="36" height="8" fill="#ffffff" />
+                          <rect y="22" width="36" height="14" fill="#8f1d36" />
+                        </svg>
+                      )}
+                      name={__("info.languages.latvian.name")}
+                      level={__("info.languages.latvian.level")}
+                      note={__("info.languages.latvian.note") || undefined}
+                    />
+                  </ul>
+                </div>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section className="section" id="projects">
+          <div className="section-head fade-in" style={reveal("60ms")}>
+            <span className="section-label">{__("section.projects.label")}</span>
+            <h2 className="section-title">{__("projects.title")}</h2>
+          </div>
+
+          <div className="project-grid">
+            <article className="project-card fade-in" style={reveal("120ms")}>
+              <div className="project-logo">
+                <Image alt={__("projects.eshop.alt")} src={eShopLogo} />
+              </div>
+              <div className="project-info">
+                <span className="project-tag">{__("projects.eshop.tag")}</span>
+                <h3 className="project-name">e-Shop</h3>
+                <a
+                  className="project-url"
+                  href="https://filamentcheckm8.shop"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  filamentcheckm8.shop ↗
+                </a>
+              </div>
+            </article>
+
+            <article className="project-card fade-in" style={reveal("180ms")}>
+              <div className="project-logo">
+                <Image alt={__("projects.fitlife.alt")} src={fitLifeLogo} />
+              </div>
+              <div className="project-info">
+                <span className="project-tag">{__("projects.fitlife.tag")}</span>
+                <h3 className="project-name">FitLife</h3>
+                <a
+                  className="project-url"
+                  href="https://www.fit-life.style"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  www.fit-life.style ↗
+                </a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <SiteFooter
+          caption={__("footer.caption")}
+          location={__("footer.location")}
+          contactCopy={contactCopy}
+          className="fade-in"
+          style={reveal("120ms")}
+        />
+      </div>
+    </main>
   );
 }
