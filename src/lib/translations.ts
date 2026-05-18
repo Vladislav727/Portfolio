@@ -4,8 +4,10 @@ import lvPage from "@/languages/lv/page";
 import lvSettingsPage from "@/languages/lv/settings/page";
 import ruPage from "@/languages/ru/page";
 import ruSettingsPage from "@/languages/ru/settings/page";
+import ukPage from "@/languages/ua/page";
+import ukSettingsPage from "@/languages/ua/settings/page";
 
-export const locales = ["ru", "en", "lv"] as const;
+export const locales = ["ru", "en", "lv", "ua"] as const;
 export const themes = ["dark", "light"] as const;
 
 export type Locale = (typeof locales)[number];
@@ -32,6 +34,10 @@ const dictionaries: Record<
   lv: {
     page: lvPage,
     "settings/page": lvSettingsPage,
+  },
+  ua: {
+    page: ukPage,
+    "settings/page": ukSettingsPage,
   },
 };
 

@@ -4,11 +4,27 @@ import { useEffect } from "react";
 
 export function useScrollReveal(selector = ".fade-in") {
   useEffect(() => {
+    document.documentElement.classList.add("js-scroll-reveal");
+
     const elements = Array.from(document.querySelectorAll<HTMLElement>(selector));
 
-    if (!elements.length) {
-      return;
-    }
+    if (!elements.length) return;
+
+    // Fallback: if page is short / user is already near the footer,
+    // IntersectionObserver may not fire in time (especially on touch devices).
+    // Mark as visible when element is already in viewport.
+    const markVisibleIfInView = () => {
+      const vh = window.innerHeight || 0;
+      for (const el of elements) {
+        const rect = el.getBoundingClientRect();
+        // Basic viewport intersection check
+        if (rect.bottom > 0 && rect.top < vh * 0.95) {
+          el.classList.add("is-visible");
+        }
+      }
+    };
+
+    markVisibleIfInView();
 
     if (
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
@@ -35,6 +51,14 @@ export function useScrollReveal(selector = ".fade-in") {
 
     elements.forEach((element) => observer.observe(element));
 
-    return () => observer.disconnect();
+    // Fallback: never leave interactive content invisible.
+    const revealTimeout = window.setTimeout(() => {
+      elements.forEach((element) => element.classList.add("is-visible"));
+    }, 1400);
+
+    return () => {
+      window.clearTimeout(revealTimeout);
+      observer.disconnect();
+    };
   }, [selector]);
 }

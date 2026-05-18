@@ -25,9 +25,8 @@ const displayFont = Rubik({
 });
 
 export const metadata: Metadata = {
-  title: "Владислав | Portfolio",
-  description:
-    "Портфолио Владислава — техника-программиста из Cesis, Latvia.",
+  title: "Portfolio",
+
 };
 
 export default async function RootLayout({

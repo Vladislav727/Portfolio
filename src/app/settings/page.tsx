@@ -2,8 +2,7 @@
 
 import type { CSSProperties } from "react";
 
-import { getContactDialogCopy } from "@/components/contact-dialog";
-import { SiteFooter } from "@/components/site-footer";
+// contact dialog copy not needed on settings page
 import { SiteHeader } from "@/components/site-header";
 import { useScrollReveal } from "@/components/use-scroll-reveal";
 import {
@@ -20,7 +19,7 @@ export default function SettingsPage() {
   const { __ } = useTranslations("settings/page");
   useScrollReveal();
 
-  const contactCopy = getContactDialogCopy(__);
+  // footer removed on settings page; contact copy not needed here
   const navItems = [
     { href: "/", label: __("nav.home") },
     { href: "/#info", label: __("nav.info") },
@@ -126,6 +125,14 @@ export default function SettingsPage() {
                 >
                   {__("language.lv")}
                 </button>
+                <button
+                  className={locale === "ua" ? "lang-opt lang-opt--active" : "lang-opt"}
+                  type="button"
+                  onClick={() => setLocale("ua")}
+                  aria-pressed={locale === "ua"}
+                >
+                  {__("language.ua")}
+                </button>
               </div>
             </div>
           </div>
@@ -148,13 +155,7 @@ export default function SettingsPage() {
           </div>
         </section>
 
-        <SiteFooter
-          caption={__("footer.caption")}
-          location={__("footer.location")}
-          contactCopy={contactCopy}
-          className="fade-in"
-          style={reveal("320ms")}
-        />
+        {/* Footer intentionally removed from settings page */}
       </div>
     </main>
   );

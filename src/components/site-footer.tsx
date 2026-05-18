@@ -1,5 +1,4 @@
 import type { CSSProperties } from "react";
-
 import type { ContactDialogCopy } from "@/components/contact-dialog";
 import { ContactDialog } from "@/components/contact-dialog";
 
@@ -19,12 +18,15 @@ export function SiteFooter({
   style,
 }: SiteFooterProps) {
   return (
-    <footer className={["site-footer", className].filter(Boolean).join(" ")} style={style}>
-      <div className="site-footer-copy">
-        <p>{caption}</p>
-        <p>{location}</p>
-      </div>
-      <ContactDialog copy={contactCopy} />
-    </footer>
+    <div className="site-footer-wrap">
+      <footer className={["site-footer", className].filter(Boolean).join(" ")} style={style}>
+        <div className="site-footer-copy">
+          <p>{caption}</p>
+          <p>{location}</p>
+        </div>
+        <ContactDialog copy={contactCopy} />
+      </footer>
+    </div>
   );
+
 }

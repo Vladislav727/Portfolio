@@ -15,6 +15,7 @@ const page = {
   "language.ru": "Krievu",
   "language.en": "Angļu",
   "language.lv": "Latviešu",
+  "language.ua": "Ukraiņu",
   "note.saved": "Iestatījumi tiek saglabāti pārlūkā un tiek piemēroti uzreiz.",
   "footer.caption": "Portfolio · 18.05.2026",
   "footer.location": "Cēsis, Latvija",

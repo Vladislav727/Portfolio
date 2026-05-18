@@ -1,11 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import vladImg from "../../vlad.png";
+import vladRiver from "../../vladokoloriver.jpg";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 
 import { getContactDialogCopy } from "@/components/contact-dialog";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { DebugFooter } from "@/components/debug-footer";
 import { useScrollReveal } from "@/components/use-scroll-reveal";
 import { useTranslations } from "@/components/preferences-provider";
 
@@ -41,6 +45,37 @@ function LanguageCard({ flag, name, level, note }: LanguageCardProps) {
 export default function Home() {
   const { __ } = useTranslations("page");
   useScrollReveal();
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
+
+  useEffect(() => {
+    const el = titleRef.current;
+    if (!el) return;
+
+    const adjust = () => {
+      // reset to CSS size first
+      el.style.fontSize = "";
+      const computed = window.getComputedStyle(el);
+      let size = Math.max(12, parseFloat(computed.fontSize));
+
+      // shrink until fits or reach minimum
+      while (el.scrollWidth > el.clientWidth && size > 12) {
+        size -= 1;
+        el.style.fontSize = `${size}px`;
+      }
+    };
+
+    adjust();
+
+    const ro = new ResizeObserver(adjust);
+    ro.observe(el);
+    if (el.parentElement) ro.observe(el.parentElement);
+
+    window.addEventListener("resize", adjust);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", adjust);
+    };
+  }, [__]);
 
   const contactCopy = getContactDialogCopy(__);
   const navItems = [
@@ -48,6 +83,14 @@ export default function Home() {
     { href: "#info", label: __("nav.info"), kind: "anchor" as const },
     { href: "#projects", label: __("nav.projects"), kind: "anchor" as const },
   ];
+  const [portraitIndex, setPortraitIndex] = useState(0);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setPortraitIndex((i) => (i + 1) % 2);
+    }, 10000);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
     <main className="page-shell">
@@ -65,30 +108,33 @@ export default function Home() {
 
         <section className="hero" id="top">
           <div className="hero-intro">
-            <p className="hero-eyebrow fade-in" style={reveal("90ms")}>
-              {__("hero.eyebrow")}
-            </p>
-            <h1 className="hero-title fade-in" style={reveal("170ms")}>
-              {__("hero.title.line1")}<br />{__("hero.title.line2")}
-            </h1>
-            <p className="hero-lead fade-in" style={reveal("250ms")}>
-              {__("hero.lead")}
-            </p>
+            <p className="hero-eyebrow fade-in" style={reveal("90ms")}> {__("hero.eyebrow")} </p>
 
-            <ul className="hero-highlights fade-in" style={reveal("330ms")}>
-              <li className="hero-pill">
-                <span className="hero-pill-dot" aria-hidden="true" />
-                {__("hero.meta.role")}
-              </li>
-              <li className="hero-pill">
-                <span className="hero-pill-dot" aria-hidden="true" />
-                {__("hero.meta.location")}
-              </li>
-              <li className="hero-pill">
-                <span className="hero-pill-dot" aria-hidden="true" />
-                {__("hero.meta.focus")}
-              </li>
-            </ul>
+            <div className="hero-intro-row fade-in" style={reveal("170ms")}>
+              <div className="hero-portrait-viewport" aria-hidden="true">
+                <div
+                  className="portrait-track"
+                    style={{ transform: `translateX(${-portraitIndex * 50}%)` }}
+                >
+                  <div className="portrait-item">
+                    <Image src={vladImg} alt="Vladislav" width={120} height={120} />
+                  </div>
+                  <div className="portrait-item">
+                    <Image src={vladRiver} alt="Vlad by the river" width={120} height={120} />
+                  </div>
+                </div>
+              </div>
+              <h1
+                className="hero-title"
+                aria-label={`${__("hero.title.line1")} ${__("hero.title.line2")}`}
+                ref={(el) => {
+                  // attach ref via callback to keep TS happy
+                  titleRef.current = el;
+                }}
+              >
+                {__("hero.title.line1")} {__("hero.title.line2")}
+              </h1>
+            </div>
           </div>
 
           <div className="hero-actions fade-in" style={reveal("410ms")}>
@@ -290,6 +336,8 @@ export default function Home() {
             </article>
           </div>
         </section>
+
+        <DebugFooter />
 
         <SiteFooter
           caption={__("footer.caption")}
